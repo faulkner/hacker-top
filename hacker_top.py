@@ -529,12 +529,18 @@ class Interval(object):
 
 def open_url(url, tabbed=False):
     """ Open URL and handle window refresh """
-    if (tabbed):
-        webbrowser.open_new_tab(url)
-    else:
-        webbrowser.open_new(url)
+    savout = os.dup(1)
+    os.close(1)
+    os.open(os.devnull, os.O_RDWR)
+    try:
+        if (tabbed):
+            webbrowser.open_new_tab(url)
+        else:
+            webbrowser.open_new(url)
 
-    interface.body_win.clearok(1)
+        interface.body_win.clearok(1)
+    finally:
+       os.dup2(savout, 1)
 
 def gethw():
     """
