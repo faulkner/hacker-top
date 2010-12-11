@@ -480,15 +480,15 @@ class Interface(object):
             return
         elif char == ord('o'):
             # Open topmost story in webbrrowser (new window)
-            webbrowser.open_new(self.stories[self.start_pos].url)
+            open_url(self.stories[self.start_pos].url)
             return
         elif char == ord('t'):
             # Open topmost story in webbrowser (new tab)
-            webbrowser.open_new_tab(self.stories[self.start_pos].url)
+            open_url(self.stories[self.start_pos].url, True)
             return
         elif char == ord('c'):
             # Open topmost story's comments in webbrowser (new tab)
-            webbrowser.open_new_tab(self.stories[self.start_pos].comments_url)
+            open_url(self.stories[self.start_pos].comments_url, True)
             return
             
 class Interval(object):
@@ -526,6 +526,15 @@ class Interval(object):
             return num*60*60
 
     interval = property(lambda self: self._interval)
+
+def open_url(url, tabbed=False):
+    """ Open URL and handle window refresh """
+    if (tabbed):
+        webbrowser.open_new_tab(url)
+    else:
+        webbrowser.open_new(url)
+
+    interface.body_win.clearok(1)
 
 def gethw():
     """
